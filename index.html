@@ -430,6 +430,41 @@
       opacity: 0.5;
     }
 
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+    }
+    .footer-link:hover {
+      border-color: #fa5c5c;
+      color: #fa5c5c;
+      background: rgba(250,92,92,0.06);
+    }
+    .footer-link svg {
+      flex-shrink: 0;
+      transition: fill 0.3s;
+    }
+    .footer-link:hover svg path,
+    .footer-link:hover svg rect {
+      fill: #fa5c5c;
+    }
+
     /* corner ornaments */
     .corner {
       position: absolute;
@@ -658,6 +693,18 @@
   <footer>
     <div class="footer-brand">TSBC Games</div>
     <div class="footer-sub">Part of TenStudios Broadcasting Community</div>
+
+    <div class="footer-links">
+      <a class="footer-link" href="https://tenstudiosbc.itch.io/" target="_blank" rel="noopener noreferrer">
+        <!-- Official Itch.io logo mark -->
+        <svg width="18" height="18" viewBox="0 0 245.371 220.736" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M31.99 1.365C21.287 7.72.2 31.945 0 38.298v10.516C0 62.144 12.46 73.86 23.773 73.86c13.584 0 24.902-11.258 24.902-24.77 0 13.512 10.935 24.77 24.52 24.77 13.583 0 24.238-11.258 24.238-24.77 0 13.512 11.267 24.77 24.853 24.77h.136c13.587 0 24.855-11.258 24.855-24.77 0 13.512 10.654 24.77 24.237 24.77 13.584 0 24.52-11.258 24.52-24.77 0 13.512 11.317 24.77 24.9 24.77 11.315 0 23.774-11.715 23.774-25.046V38.298c-.2-6.353-21.287-30.578-31.988-36.933C218.553.6 217.586 0 216.298 0H29.07C27.785 0 26.816.6 31.99 1.365zM50.562 88.89c-13.476 0-24.99 1.4-32.986 7.754v2.43c1.08 9.62 5.626 18.24 12.52 24.77 6.896 6.53 16.01 10.37 25.37 10.38h.013c9.36-.01 18.474-3.85 25.37-10.38 6.895-6.53 11.44-15.15 12.52-24.77v-2.43c-8-6.354-19.51-7.754-32.986-7.754h-9.82zm143.248 0c-13.477 0-24.99 1.4-32.987 7.754v2.43c1.08 9.62 5.625 18.24 12.52 24.77 6.896 6.53 16.01 10.37 25.37 10.38h.013c9.36-.01 18.474-3.85 25.37-10.38 6.894-6.53 11.44-15.15 12.52-24.77v-2.43c-7.997-6.354-19.51-7.754-32.987-7.754h-9.82zm-71.623 0c-13.477 0-24.99 1.4-32.986 7.754v2.43c1.08 9.62 5.625 18.24 12.52 24.77 6.895 6.53 16.01 10.37 25.37 10.38h.012c9.36-.01 18.474-3.85 25.37-10.38 6.895-6.53 11.44-15.15 12.52-24.77v-2.43c-7.997-6.354-19.51-7.754-32.986-7.754h-9.82z" fill="#a8a09a"/>
+          <path d="M122.186 131.534c-20.615 0-38.934 1.974-50.56 7.03v130.97c12.064-3.487 29.87-5.797 50.56-5.797 20.69 0 38.495 2.31 50.56 5.797V138.564c-11.626-5.056-29.946-7.03-50.56-7.03z" fill="#a8a09a"/>
+        </svg>
+        Our Itch.io Profile
+      </a>
+    </div>
+
     <div class="footer-copy">© 2014 – present · Non-Profit Indie Development · All rights reserved</div>
   </footer>
 
@@ -723,5 +770,5 @@
     })();
   </script>
 
- </body>  
-</html>
+</body>
+  </html>
