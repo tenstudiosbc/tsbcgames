@@ -117,11 +117,15 @@
       animation: fadeDown 0.9s ease 0.1s both;
     }
 
-    /* pixel-style emblem */
+    /* TSBC logo image */
     .emblem {
       display: block;
-      margin: 0 auto 20px;
-      width: 72px; height: 72px;
+      margin: 0 auto 24px;
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 24px rgba(201,147,58,0.45));
+      animation: fadeDown 0.85s ease 0.05s both;
     }
 
     h1 {
@@ -481,22 +485,8 @@
     <div class="logo-wrap wrapper" style="z-index:2;position:relative;">
       <div class="badge">TenStudios Broadcasting Community</div>
 
-      <!-- SVG Emblem -->
-      <svg class="emblem" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- outer octagon -->
-        <polygon points="36,4 58,14 68,36 58,58 36,68 14,58 4,36 14,14"
-          stroke="#c9933a" stroke-width="1.5" fill="none" opacity="0.7"/>
-        <!-- inner diamond -->
-        <polygon points="36,18 50,36 36,54 22,36"
-          stroke="#c9933a" stroke-width="1" fill="rgba(201,147,58,0.06)" opacity="0.9"/>
-        <!-- center star / controller icon -->
-        <text x="36" y="41" text-anchor="middle" font-size="16" fill="#c9933a" font-family="serif">⚔</text>
-        <!-- corner dots -->
-        <circle cx="36" cy="7"  r="2" fill="#c9933a" opacity="0.5"/>
-        <circle cx="36" cy="65" r="2" fill="#c9933a" opacity="0.5"/>
-        <circle cx="7"  cy="36" r="2" fill="#c9933a" opacity="0.5"/>
-        <circle cx="65" cy="36" r="2" fill="#c9933a" opacity="0.5"/>
-      </svg>
+      <!-- TSBC Logo -->
+      <img class="emblem" src="20260128_175328.png" alt="TSBC Games Logo" />
 
       <h1>TSBC <span>Games</span></h1>
       <p class="tagline">Indie Game Development · Est. 2014</p>
@@ -733,5 +723,5 @@
     })();
   </script>
 
-</body>
-  </html>
+ </body>  
+</html>
