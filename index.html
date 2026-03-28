@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TSBC Games — Indie Game Development</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-deep:    #090b10;
+      --bg-mid:     #0e1220;
+      --bg-card:    #121828;
+      --gold:       #c9933a;
+      --gold-light: #e8b96a;
+      --gold-dim:   #7a5520;
+      --teal:       #2ea8a0;
+      --teal-dim:   #1a5e5a;
+      --text:       #d8cfc4;
+      --text-muted: #7a7060;
+      --border:     rgba(201,147,58,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* ── STARFIELD CANVAS ── */
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ── HEADER / HERO ── */
+    header {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 28px 60px;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 320px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    /* radial glow behind logo */
+    .hero-glow {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,147,58,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      border: 1px solid var(--border);
+      padding: 5px 18px;
+      border-radius: 2px;
+      margin-bottom: 32px;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .logo-wrap {
+      animation: fadeDown 0.9s ease 0.1s both;
+    }
+
+    /* pixel-style emblem */
+    .emblem {
+      display: block;
+      margin: 0 auto 20px;
+      width: 72px; height: 72px;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2.4rem, 7vw, 4.4rem);
+      font-weight: 900;
+      color: #fff;
+      text-shadow:
+        0 0 40px rgba(201,147,58,0.35),
+        0 2px 0 rgba(0,0,0,0.8);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .tagline {
+      margin-top: 18px;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.75rem, 2vw, 0.9rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      animation: fadeDown 1s ease 0.25s both;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.4;
+      animation: fadeDown 1.2s ease 0.6s both;
+    }
+    .scroll-hint span {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .scroll-hint svg { animation: bounceY 2s ease-in-out infinite; }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: 100px 0;
+    }
+
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9.5px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+    .divider span {
+      display: block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+    .divider svg { flex-shrink: 0; }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-text p + p { margin-top: 16px; }
+
+    em { color: var(--gold-light); font-style: italic; }
+
+    .stats-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .stat-item { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stat-item:first-child { padding-top: 0; }
+
+    .stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--gold-light);
+    }
+
+    /* ── GENRE CARDS ── */
+    .genre-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .genre-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .genre-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+    .genre-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(201,147,58,0.04), transparent);
+    }
+
+    .genre-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: block;
+      line-height: 1;
+    }
+
+    .genre-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+
+    .genre-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── SUPPORT ── */
+    .support-section {
+      background: var(--bg-mid);
+      position: relative;
+      overflow: hidden;
+    }
+    .support-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 10% 50%, rgba(46,168,160,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse at 90% 50%, rgba(201,147,58,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .support-card {
+      padding: 28px 24px;
+      border: 1px solid rgba(46,168,160,0.15);
+      background: rgba(46,168,160,0.04);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .support-card:hover {
+      border-color: var(--teal);
+      background: rgba(46,168,160,0.08);
+    }
+
+    .support-card .num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2rem;
+      color: var(--teal);
+      opacity: 0.4;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .support-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .support-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── COMMUNITY ── */
+    .community-box {
+      border: 1px solid var(--border);
+      padding: 56px 48px;
+      position: relative;
+      text-align: center;
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(201,147,58,0.03) 100%);
+    }
+    .community-box::before,
+    .community-box::after {
+      content: '✦';
+      position: absolute;
+      font-size: 10px;
+      color: var(--gold-dim);
+    }
+    .community-box::before { top: 14px; left: 20px; }
+    .community-box::after  { bottom: 14px; right: 20px; }
+
+    .community-box p {
+      max-width: 560px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    .community-box .warning {
+      display: inline-block;
+      margin-top: 24px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      max-width: 480px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 60px 28px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    footer::before {
+      content: '';
+      display: block;
+      width: 200px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      margin: 0 auto 40px;
+    }
+
+    .footer-brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .footer-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .footer-copy {
+      margin-top: 32px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    /* corner ornaments */
+    .corner {
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .corner-tl { top: 16px; left: 16px; border-width: 1px 0 0 1px; }
+    .corner-tr { top: 16px; right: 16px; border-width: 1px 1px 0 0; }
+    .corner-bl { bottom: 16px; left: 16px; border-width: 0 0 1px 1px; }
+    .corner-br { bottom: 16px; right: 16px; border-width: 0 1px 1px 0; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceY {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+
+    /* scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .about-grid,
+      .genre-grid,
+      .support-grid { grid-template-columns: 1fr; }
+      .community-box { padding: 36px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Starfield -->
+  <canvas id="stars"></canvas>
+
+  <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+  <header>
+    <div class="hero-glow"></div>
+
+    <div class="logo-wrap wrapper" style="z-index:2;position:relative;">
+      <div class="badge">TenStudios Broadcasting Community</div>
+
+      <!-- SVG Emblem -->
+      <svg class="emblem" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- outer octagon -->
+        <polygon points="36,4 58,14 68,36 58,58 36,68 14,58 4,36 14,14"
+          stroke="#c9933a" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <!-- inner diamond -->
+        <polygon points="36,18 50,36 36,54 22,36"
+          stroke="#c9933a" stroke-width="1" fill="rgba(201,147,58,0.06)" opacity="0.9"/>
+        <!-- center star / controller icon -->
+        <text x="36" y="41" text-anchor="middle" font-size="16" fill="#c9933a" font-family="serif">⚔</text>
+        <!-- corner dots -->
+        <circle cx="36" cy="7"  r="2" fill="#c9933a" opacity="0.5"/>
+        <circle cx="36" cy="65" r="2" fill="#c9933a" opacity="0.5"/>
+        <circle cx="7"  cy="36" r="2" fill="#c9933a" opacity="0.5"/>
+        <circle cx="65" cy="36" r="2" fill="#c9933a" opacity="0.5"/>
+      </svg>
+
+      <h1>TSBC <span>Games</span></h1>
+      <p class="tagline">Indie Game Development · Est. 2014</p>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+        <line x1="8" y1="0" x2="8" y2="14" stroke="#c9933a" stroke-width="1.5"/>
+        <polyline points="3,10 8,16 13,10" stroke="#c9933a" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════ ABOUT ════════════════════════════════ -->
+  <section>
+    <div class="wrapper">
+      <div class="reveal">
+        <p class="section-label">Who We Are</p>
+        <h2>Born from Community</h2>
+        <div class="divider">
+          <span></span>
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 11,6 6,11 1,6" stroke="#c9933a" stroke-width="1" fill="none"/></svg>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            TSBC Games is an <em>indie game development team</em> born from
+            <em>TenStudios Broadcasting Community</em> — a non-profit community
+            founded on <em>October 6, 2014</em>.
+          </p>
+          <p>
+            We create gacha titles, sprawling open-world adventures, and
+            deeply story-driven RPGs. Every project we make is shaped by the
+            voices of our community, because great stories need great listeners.
+          </p>
+          <p>
+            Our philosophy is simple: put heart into every pixel, every line
+            of dialogue, every mechanic — and always keep the door open to
+            the people who play our games.
+          </p>
+        </div>
+
+        <div class="stats-panel reveal">
+          <div class="stat-item">
+            <div class="stat-label">Community Founded</div>
+            <div class="stat-value">October 6, 2014</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Organization Type</div>
+            <div class="stat-value">Non-Profit Community</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Focus</div>
+            <div class="stat-value">Storytelling & Player Feedback</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Origin</div>
+            <div class="stat-value">TenStudios Broadcasting Community</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ GENRES ════════════════════════════════ -->
+  <section style="padding-top: 20px;">
+    <div class="wrapper">
+      <div class="reveal">
+        <p class="section-label">What We Make</p>
+        <h2>Our Game Genres</h2>
+        <div class="divider">
+          <span></span>
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 11,6 6,11 1,6" stroke="#c9933a" stroke-width="1" fill="none"/></svg>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="genre-grid">
+        <div class="genre-card reveal">
+          <span class="genre-icon">🎴</span>
+          <h3>Gacha</h3>
+          <p>Collection-driven experiences built around exciting pulls, character lore, and strategic team-building.</p>
+        </div>
+        <div class="genre-card reveal" style="transition-delay:0.1s">
+          <span class="genre-icon">🌍</span>
+          <h3>Open World</h3>
+          <p>Expansive worlds with freedom to explore, discover hidden lore, and shape your own journey.</p>
+        </div>
+        <div class="genre-card reveal" style="transition-delay:0.2s">
+          <span class="genre-icon">📖</span>
+          <h3>Story-Driven RPG</h3>
+          <p>Narrative-first adventures with rich characters, meaningful choices, and unforgettable moments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ SUPPORT ═══════════════════════════════ -->
+  <section class="support-section">
+    <div class="wrapper" style="position:relative;z-index:2;">
+      <div class="reveal">
+        <p class="section-label">How You Can Help</p>
+        <h2>Support TSBC Games</h2>
+        <div class="divider">
+          <span></span>
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 11,6 6,11 1,6" stroke="#2ea8a0" stroke-width="1" fill="none"/></svg>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="support-grid">
+        <div class="support-card reveal">
+          <div class="num">01</div>
+          <h3>Share</h3>
+          <p>Tell your friends. Spread the word on social media. Sharing our games is one of the most powerful things you can do for us.</p>
+        </div>
+        <div class="support-card reveal" style="transition-delay:0.1s">
+          <div class="num">02</div>
+          <h3>Donate</h3>
+          <p>If you enjoy what we make, consider supporting us with a donation. Every contribution goes back into the games.</p>
+        </div>
+        <div class="support-card reveal" style="transition-delay:0.2s">
+          <div class="num">03</div>
+          <h3>Feedback</h3>
+          <p>Give us constructive feedback. Bug reports, suggestions, and honest reviews all help us improve with every release.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ COMMUNITY ═════════════════════════════ -->
+  <section>
+    <div class="wrapper">
+      <div class="reveal">
+        <p class="section-label">Our Values</p>
+        <h2>Community First</h2>
+        <div class="divider">
+          <span></span>
+          <svg width="12" height="12" viewBox="0 0 12 12"><polygon points="6,1 11,6 6,11 1,6" stroke="#c9933a" stroke-width="1" fill="none"/></svg>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="community-box reveal">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+
+        <p>
+          We welcome <em>all kinds of criticism</em> — your feedback shapes our
+          games into something better. Speak honestly, speak freely, and know
+          that your voice is heard by a team that genuinely cares.
+        </p>
+
+        <div class="warning">
+          That said — criticism is not a license for harassment.<br/>
+          Please treat our team with the respect every human deserves.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ FOOTER ════════════════════════════════ -->
+  <footer>
+    <div class="footer-brand">TSBC Games</div>
+    <div class="footer-sub">Part of TenStudios Broadcasting Community</div>
+    <div class="footer-copy">© 2014 – present · Non-Profit Indie Development · All rights reserved</div>
+  </footer>
+
+  <!-- ─── STARFIELD JS ─── -->
+  <script>
+    (function () {
+      const canvas = document.getElementById('stars');
+      const ctx = canvas.getContext('2d');
+      let W, H, stars = [];
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function initStars() {
+        stars = [];
+        const count = Math.floor((W * H) / 3800);
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: Math.random() * 1.1 + 0.2,
+            a: Math.random(),
+            speed: Math.random() * 0.004 + 0.001,
+            phase: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      let t = 0;
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        t += 0.01;
+        for (const s of stars) {
+          const alpha = s.a * (0.5 + 0.5 * Math.sin(t * s.speed * 60 + s.phase));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(230,210,170,${alpha})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { resize(); initStars(); });
+      resize(); initStars(); draw();
+    })();
+  </script>
+
+  <!-- ─── SCROLL REVEAL JS ─── -->
+  <script>
+    (function () {
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => obs.observe(el));
+    })();
+  </script>
+
+</body>
+  </html>
