@@ -626,6 +626,69 @@
     }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
 
+    /* modal action buttons row */
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0 28px;
+    }
+
+    .modal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid;
+      transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+    }
+    .modal-btn svg { flex-shrink: 0; transition: fill 0.25s; }
+
+    /* Itch download — gold */
+    .modal-btn-itch {
+      color: var(--gold-light);
+      border-color: var(--gold-dim);
+      background: rgba(201,147,58,0.06);
+    }
+    .modal-btn-itch:hover {
+      background: rgba(201,147,58,0.16);
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(201,147,58,0.2);
+      color: #fff;
+    }
+
+    /* Bluesky — sky blue */
+    .modal-btn-bsky {
+      color: #74b9e8;
+      border-color: rgba(116,185,232,0.25);
+      background: rgba(116,185,232,0.05);
+    }
+    .modal-btn-bsky:hover {
+      background: rgba(116,185,232,0.14);
+      border-color: #74b9e8;
+      box-shadow: 0 0 16px rgba(116,185,232,0.18);
+      color: #fff;
+    }
+
+    /* Discord — blurple */
+    .modal-btn-discord {
+      color: #8fa9f5;
+      border-color: rgba(143,169,245,0.25);
+      background: rgba(143,169,245,0.05);
+    }
+    .modal-btn-discord:hover {
+      background: rgba(143,169,245,0.14);
+      border-color: #8fa9f5;
+      box-shadow: 0 0 16px rgba(143,169,245,0.18);
+      color: #fff;
+    }
+
     /* corner ornaments */
     .corner {
       position: absolute;
@@ -847,6 +910,35 @@
           <span class="engine-tag">📱 Android · RPG Maker MV</span>
         </div>
 
+        <!-- Action buttons -->
+        <div class="modal-actions">
+          <!-- Download / Itch.io -->
+          <a class="modal-btn modal-btn-itch" href="https://tenstudiosbc.itch.io/ssia-vanguard-chronicles" target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 245.371 220.736" xmlns="http://www.w3.org/2000/svg">
+              <path d="M31.99 1.365C21.287 7.72.2 31.945 0 38.298v10.516C0 62.144 12.46 73.86 23.773 73.86c13.584 0 24.902-11.258 24.902-24.77 0 13.512 10.935 24.77 24.52 24.77 13.583 0 24.238-11.258 24.238-24.77 0 13.512 11.267 24.77 24.853 24.77h.136c13.587 0 24.855-11.258 24.855-24.77 0 13.512 10.654 24.77 24.237 24.77 13.584 0 24.52-11.258 24.52-24.77 0 13.512 11.317 24.77 24.9 24.77 11.315 0 23.774-11.715 23.774-25.046V38.298c-.2-6.353-21.287-30.578-31.988-36.933C218.553.6 217.586 0 216.298 0H29.07C27.785 0 26.816.6 31.99 1.365zM50.562 88.89c-13.476 0-24.99 1.4-32.986 7.754v2.43c1.08 9.62 5.626 18.24 12.52 24.77 6.896 6.53 16.01 10.37 25.37 10.38h.013c9.36-.01 18.474-3.85 25.37-10.38 6.895-6.53 11.44-15.15 12.52-24.77v-2.43c-8-6.354-19.51-7.754-32.986-7.754h-9.82zm143.248 0c-13.477 0-24.99 1.4-32.987 7.754v2.43c1.08 9.62 5.625 18.24 12.52 24.77 6.896 6.53 16.01 10.37 25.37 10.38h.013c9.36-.01 18.474-3.85 25.37-10.38 6.894-6.53 11.44-15.15 12.52-24.77v-2.43c-7.997-6.354-19.51-7.754-32.987-7.754h-9.82zm-71.623 0c-13.477 0-24.99 1.4-32.986 7.754v2.43c1.08 9.62 5.625 18.24 12.52 24.77 6.895 6.53 16.01 10.37 25.37 10.38h.012c9.36-.01 18.474-3.85 25.37-10.38 6.895-6.53 11.44-15.15 12.52-24.77v-2.43c-7.997-6.354-19.51-7.754-32.986-7.754h-9.82z" fill="currentColor"/>
+            </svg>
+            Download on Itch.io
+          </a>
+
+          <!-- Bluesky -->
+          <a class="modal-btn modal-btn-bsky" href="https://bsky.app/profile/ssiavanguardtsbc.bsky.social" target="_blank" rel="noopener noreferrer">
+            <!-- Official Bluesky butterfly mark -->
+            <svg width="15" height="15" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
+              <path d="M407.8 294.7c-3.3-.4-6.7-.8-10-1.3c3.4.4 6.7.9 10 1.3zM288 227.1C261.9 176.4 190.9 81.9 124.9 35.3C61.6-9.4 37.5-1.7 21.6 5.5C3.3 13.8 0 41.9 0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7c3.3-.5 6.7-.9 10-1.3c-3.4.4-6.7.9-10 1.3C74.3 308.6-9.1 342.8 1.5 423.4C8.4 480.3 59.8 512 127.9 512c16.5 0 34.9-4.1 52.4-11.8C233 477.6 280.1 448.2 288 392.7c7.9 55.5 55 84.9 107.7 107.5c17.5 7.7 35.9 11.8 52.4 11.8c68.1 0 119.5-31.7 126.4-88.6c10.6-80.6-72.8-114.8-167.3-128.7c-3.3-.4-6.7-.8-10-1.3c3.4.4 6.7.9 10 1.3c64.1 7.2 133.6-15.1 153.2-80.7C566.9 194 576 75 576 58.4s-3.3-44.7-21.6-52.9c-15.9-7.2-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1z" fill="currentColor"/>
+            </svg>
+            Bluesky
+          </a>
+
+          <!-- Discord -->
+          <a class="modal-btn modal-btn-discord" href="https://discord.gg/tjJwUKguSk" target="_blank" rel="noopener noreferrer">
+            <!-- Official Discord logo mark -->
+            <svg width="16" height="16" viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
+              <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15zM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69z" fill="currentColor"/>
+            </svg>
+            Join Discord
+          </a>
+        </div>
+
         <!-- Description -->
         <div class="modal-desc">In <em>SSIA: Vanguard Chronicles</em>, take on the role of a former SSIA special agent stripped of your power and purpose after a devastating ambush. But fate has more in store. After months of recovery, a mysterious lead calls you back to the SSIA and your destiny. Shadows rise, and your choices will shape the future of the realm.
 
@@ -1041,4 +1133,4 @@
   </script>
 
 </body>
-</html>
+  </html>
